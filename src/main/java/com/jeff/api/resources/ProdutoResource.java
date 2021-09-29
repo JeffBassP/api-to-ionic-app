@@ -10,26 +10,26 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.jeff.api.domain.Categoria;
-import com.jeff.api.service.CategoriaService;
+import com.jeff.api.domain.Produto;
+import com.jeff.api.service.ProdutoService;
 
 @RestController
-@RequestMapping(value = "/categorias")
-public class CategoriaResource {
+@RequestMapping(value = "/produtos")
+public class ProdutoResource {
 	@Autowired
-	private CategoriaService service;
+	private ProdutoService service;
 	
 	@GetMapping(value = "/lista")
-	public ResponseEntity<List<Categoria>> list() {
+	public ResponseEntity<List<Produto>> list() {
 		
-		List<Categoria> lista = service.findAll();
+		List<Produto> lista = service.findAll();
 
 		return ResponseEntity.ok().body(lista);	
 	}
 	
 	@GetMapping(value = "/lista/{id}")
-	public ResponseEntity<Optional<Categoria>> find(@PathVariable Integer id){
-		Optional<Categoria> obj = service.findOne(id);
+	public ResponseEntity<Optional<Produto>> find(@PathVariable Long id){
+		Optional<Produto> obj = service.findOne(id);
 		
 		return ResponseEntity.ok().body(obj);
 	}
