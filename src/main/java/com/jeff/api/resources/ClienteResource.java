@@ -1,6 +1,5 @@
 package com.jeff.api.resources;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,15 +18,7 @@ public class ClienteResource {
 	@Autowired
 	private ClienteService service;
 	
-	@GetMapping(value = "/lista")
-	public ResponseEntity<List<Cliente>> list() {
-		
-		List<Cliente> lista = service.findAll();
-
-		return ResponseEntity.ok().body(lista);	
-	}
-	
-	@GetMapping(value = "/lista/{id}")
+	@GetMapping(value = "/{id}")
 	public ResponseEntity<Optional<Cliente>> find(@PathVariable Integer id){
 		Optional<Cliente> obj = service.findOne(id);
 		
