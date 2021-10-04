@@ -13,6 +13,7 @@ import com.jeff.api.domain.Cidade;
 import com.jeff.api.domain.Cliente;
 import com.jeff.api.domain.Endereco;
 import com.jeff.api.domain.Estado;
+import com.jeff.api.domain.ItemPedido;
 import com.jeff.api.domain.Pagamento;
 import com.jeff.api.domain.PagamentoComBoleto;
 import com.jeff.api.domain.PagamentoComCartao;
@@ -25,6 +26,7 @@ import com.jeff.api.repositories.CidadeRepository;
 import com.jeff.api.repositories.ClienteRepository;
 import com.jeff.api.repositories.EnderecoRepository;
 import com.jeff.api.repositories.EstadoRepository;
+import com.jeff.api.repositories.ItemPedidoRepository;
 import com.jeff.api.repositories.PagamentoRepository;
 import com.jeff.api.repositories.PedidoRepository;
 import com.jeff.api.repositories.ProdutoRepository;
@@ -56,6 +58,9 @@ public class TestConfig implements CommandLineRunner {
 
 	@Autowired
 	private PagamentoRepository pagamentoRepository;
+	
+	@Autowired
+	private ItemPedidoRepository itemPedidoRepository;
 
 	@Override
 	public void run(String... args) throws Exception {
@@ -120,6 +125,19 @@ public class TestConfig implements CommandLineRunner {
 
 		pedidoRepository.saveAll(Arrays.asList(ped1, ped2));
 		pagamentoRepository.saveAll(Arrays.asList(pagto1, pagto2));
+		
+		ItemPedido ip1 = new ItemPedido(ped1, p1, 0.00, 1, 2000.00);
+		ItemPedido ip2 = new ItemPedido(ped1, p3, 0.00, 2, 80.00);
+		ItemPedido ip3 = new ItemPedido(ped2, p2, 100.00, 1, 800.00);
+		
+		ped1.getItens().addAll(Arrays.asList(ip1, ip2));
+		ped2.getItens().addAll(Arrays.asList(ip2));
+		
+		p1.getItens().addAll(Arrays.asList(ip1));
+		p2.getItens().addAll(Arrays.asList(ip3));
+		p3.getItens().addAll(Arrays.asList(ip2));
+		
+		itemPedidoRepository.saveAll(Arrays.asList(ip1, ip2, ip3));
 
 	}
 
