@@ -1,5 +1,6 @@
 package com.jeff.api.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,30 +19,37 @@ public class CategoriaService {
 
 	public Optional<Categoria> findOne(Integer id) {
 		Optional<Categoria> obj = repository.findById(id);
-		
-		return Optional.of(obj.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado! Id: " + id + ", Tipo " + Categoria.class.getName())));
+
+		return Optional.of(obj.orElseThrow(() -> new ObjectNotFoundException(
+				"Objeto não encontrado! Id: " + id + ", Tipo " + Categoria.class.getName())));
 	}
 
 	public Categoria insert(Categoria obj) {
 		obj.setId(null);
-		
+
 		return repository.save(obj);
 	}
 
 	public Categoria update(Categoria obj) {
 		findOne(obj.getId());
-		
+
 		return repository.save(obj);
 	}
-	
+
 	public void delete(Integer id) {
 		findOne(id);
 		try {
-		repository.deleteById(id);
-		}
-		catch (DataIntegrityViolationException e) {
+			repository.deleteById(id);
+		} catch (DataIntegrityViolationException e) {
 			throw new DataIntegrityViolationException("Não é possivel excluir uma categoria que possui produtos");
-			
+
 		}
 	}
+
+	public List<Categoria> findAll() {
+
+		return repository.findAll();
+	}
+
+	
 }
