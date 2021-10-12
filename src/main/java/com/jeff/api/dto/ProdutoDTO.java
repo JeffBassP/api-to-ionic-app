@@ -7,7 +7,7 @@ import com.jeff.api.domain.Produto;
 public class ProdutoDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	private Long id;
+	private Integer id;
 	private String nome;
 	private Double preco;
 
@@ -21,11 +21,11 @@ public class ProdutoDTO implements Serializable {
 		preco = obj.getPreco();
 	}
 
-	public Long getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
