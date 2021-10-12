@@ -2,44 +2,47 @@ package com.jeff.api.service.validation;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.servlet.HandlerMapping;
 
 import com.jeff.api.domain.Cliente;
-import com.jeff.api.domain.enums.TipoCliente;
-import com.jeff.api.dto.ClienteNewDTO;
+import com.jeff.api.dto.ClienteDTO;
 import com.jeff.api.repositories.ClienteRepository;
 import com.jeff.api.resources.exceptions.FieldMessage;
-import com.jeff.api.service.validation.utils.BR;
 
-public class ClientInsertValidator implements ConstraintValidator<ClienteInsert, ClienteNewDTO> {
+public class ClienteUpdateValidator implements ConstraintValidator<ClienteUpdate, ClienteDTO> {
+	
+	@Autowired
+	private HttpServletRequest request;
 	
 	@Autowired
 	private ClienteRepository repository;
 	
 	@Override
-	public void initialize(ClienteInsert ann) {
+	public void initialize(ClienteUpdate ann) {
 	}
 
 	@Override
-	public boolean isValid(ClienteNewDTO objDto, ConstraintValidatorContext context) {
+	public boolean isValid(ClienteDTO objDto, ConstraintValidatorContext context) {
+		
+		@SuppressWarnings("unchecked")
+		Map<String, String> map = (Map<String, String>) request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
+		
+		Integer uriId = Integer.parseInt(map.get("id"));
+		
 		List<FieldMessage> list = new ArrayList<>();
 
-		if(objDto.getTipo().equals(TipoCliente.PESSOAFISICA.getCod()) && !BR.isValidCPF(objDto.getCpfOuCnpj())) {
-			list.add(new FieldMessage("cpfOuCnpj", "CPF Invalido"));
-		}
-		
-		if(objDto.getTipo().equals(TipoCliente.PESSOAJURIDICA.getCod()) && !BR.isValidCNPJ(objDto.getCpfOuCnpj())) {
-			list.add(new FieldMessage("cpfOuCnpj", "CNPJ Invalido"));
-		}
 
 		Cliente aux = repository.findByEmail(objDto.getEmail());
 		
-		if(aux != null) {
-			list.add(new FieldMessage("email", "Email já cadastrado!"));
+		if(aux != null && !aux.getId().equals(uriId)) {
+			list.add(new FieldMessage("email", "Email Incorreto!"));
 		}
 
 		for (FieldMessage e : list) {

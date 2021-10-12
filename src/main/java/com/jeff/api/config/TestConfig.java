@@ -100,7 +100,7 @@ public class TestConfig implements CommandLineRunner {
 		estadoRepository.saveAll(Arrays.asList(est1, est2));
 		cidadeRepository.saveAll(Arrays.asList(cid1, cid2, cid3));
 
-		Cliente cli1 = new Cliente(null, "Maria Silva", "mariasilva@gmail,com", "46425878955",
+		Cliente cli1 = new Cliente(null, "Maria Silva", "mariasilva@gmail.com", "46425878955",
 				TipoCliente.PESSOAFISICA);
 		cli1.getTelefones().addAll(Arrays.asList("98995824", "46124556"));
 
