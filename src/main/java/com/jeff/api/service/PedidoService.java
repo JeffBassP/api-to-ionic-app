@@ -13,7 +13,6 @@ import com.jeff.api.domain.enums.EstadoPagamento;
 import com.jeff.api.repositories.ItemPedidoRepository;
 import com.jeff.api.repositories.PagamentoRepository;
 import com.jeff.api.repositories.PedidoRepository;
-import com.jeff.api.repositories.ProdutoRepository;
 import com.jeff.api.service.exceptions.ObjectNotFoundException;
 
 @Service
@@ -30,9 +29,6 @@ public class PedidoService {
 
 	@Autowired
 	private ProdutoService produtoService;
-
-	@Autowired
-	private ProdutoRepository produtoRepository;
 	
 	@Autowired
 	private BoletoService boletoService;
