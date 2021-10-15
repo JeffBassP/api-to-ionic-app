@@ -35,7 +35,7 @@ public class ClienteService {
 
 	public Optional<Cliente> findOne(Integer id) {
 		Optional<Cliente> obj = repository.findById(id);
-
+System.out.println("${CLEARDB_DATABASE_URL}");
 		return Optional.of(obj.orElseThrow(() -> new ObjectNotFoundException(
 				"Objeto não encontrado! Id: " + id + ", Tipo " + Cliente.class.getName())));
 	}
