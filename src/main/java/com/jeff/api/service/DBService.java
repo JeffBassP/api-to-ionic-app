@@ -20,6 +20,7 @@ import com.jeff.api.domain.PagamentoComCartao;
 import com.jeff.api.domain.Pedido;
 import com.jeff.api.domain.Produto;
 import com.jeff.api.domain.enums.EstadoPagamento;
+import com.jeff.api.domain.enums.Perfil;
 import com.jeff.api.domain.enums.TipoCliente;
 import com.jeff.api.repositories.CategoriaRepository;
 import com.jeff.api.repositories.CidadeRepository;
@@ -123,18 +124,25 @@ public class DBService {
 		estadoRepository.saveAll(Arrays.asList(est1, est2));
 		cidadeRepository.saveAll(Arrays.asList(cid1, cid2, cid3));
 
-		Cliente cli1 = new Cliente(null, "Maria Silva", "jeferson_jfs@hotmail.com", "46425878955",
-				TipoCliente.PESSOAFISICA, pe.encode("123456"));
+		Cliente cli1 = new Cliente(null, "Maria Silva", "maria@gmail.com", "46425878955", TipoCliente.PESSOAFISICA, pe.encode("123456"));
 		cli1.getTelefones().addAll(Arrays.asList("98995824", "46124556"));
+		
+		Cliente cli2 = new Cliente(null, "Jeff Sergio", "jeferson@gmail.com", "72317357036", TipoCliente.PESSOAFISICA, pe.encode("123456"));
+		cli2.addPerfil(Perfil.ADMIN);
+		cli2.getTelefones().addAll(Arrays.asList("46451323", "74179879"));
+		
 
 		Endereco e1 = new Endereco(null, "Rua Flores", "300", "Apto203", "Jardim", "38220834", cli1, cid1);
 		Endereco e2 = new Endereco(null, "Avenida Matos", "105", "Sala 800", "centro", "37777012", cli1, cid2);
+		
+		Endereco e3 = new Endereco(null, "Estrada da Bela Vista", "450", "Apto 303", "Santa mMaria", "06150360", cli2, cid3);
 
 		cli1.getEnderecos().addAll(Arrays.asList(e1, e2));
+		cli2.getEnderecos().addAll(Arrays.asList(e3));
+		
+		clienteRepository.saveAll(Arrays.asList(cli1, cli2));
 
-		clienteRepository.saveAll(Arrays.asList(cli1));
-
-		enderecoRepository.saveAll(Arrays.asList(e1, e2));
+		enderecoRepository.saveAll(Arrays.asList(e1, e2, e3));
 
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyy HH:mm");
 
