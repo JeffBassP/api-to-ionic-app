@@ -14,12 +14,15 @@ import org.springframework.stereotype.Service;
 import com.jeff.api.domain.Cidade;
 import com.jeff.api.domain.Cliente;
 import com.jeff.api.domain.Endereco;
+import com.jeff.api.domain.enums.Perfil;
 import com.jeff.api.domain.enums.TipoCliente;
 import com.jeff.api.dto.ClienteDTO;
 import com.jeff.api.dto.ClienteNewDTO;
 import com.jeff.api.repositories.CidadeRepository;
 import com.jeff.api.repositories.ClienteRepository;
 import com.jeff.api.repositories.EnderecoRepository;
+import com.jeff.api.security.UserSS;
+import com.jeff.api.service.exceptions.AuthorizationException;
 import com.jeff.api.service.exceptions.ObjectNotFoundException;
 
 @Service
@@ -33,13 +36,20 @@ public class ClienteService {
 
 	@Autowired
 	private EnderecoRepository enderecoRepository;
-	
+
 	@Autowired
 	private BCryptPasswordEncoder pe;
 
 	public Optional<Cliente> findOne(Integer id) {
+
+		UserSS user = UserService.authenticated();
+
+		if (user == null || !user.hasHole(Perfil.ADMIN) && id.equals(user.getId())) {
+			throw new AuthorizationException("Acesso negado");
+		}
+
 		Optional<Cliente> obj = repository.findById(id);
-System.out.println("${CLEARDB_DATABASE_URL}");
+
 		return Optional.of(obj.orElseThrow(() -> new ObjectNotFoundException(
 				"Objeto não encontrado! Id: " + id + ", Tipo " + Cliente.class.getName())));
 	}

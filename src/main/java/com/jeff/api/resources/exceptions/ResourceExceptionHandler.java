@@ -12,6 +12,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import com.jeff.api.service.exceptions.AuthorizationException;
 import com.jeff.api.service.exceptions.ObjectNotFoundException;
 
 @ControllerAdvice
@@ -47,6 +48,16 @@ public class ResourceExceptionHandler {
 		for(FieldError x : e.getBindingResult().getFieldErrors()) {
 			err.addError(x.getField(), x.getDefaultMessage());
 		}
+		
+		return ResponseEntity.status(status).body(err);
+	}
+	
+	@ExceptionHandler(AuthorizationException.class)
+	public ResponseEntity<StandardError> validation(AuthorizationException e, HttpServletRequest request){
+		String error = "Object not found";
+		HttpStatus status = HttpStatus.FORBIDDEN;
+		
+		StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
 		
 		return ResponseEntity.status(status).body(err);
 	}
