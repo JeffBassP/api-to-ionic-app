@@ -2,9 +2,11 @@ package com.jeff.api.service;
 
 import java.util.Date;
 
+import org.apache.naming.factory.SendMailFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 
+import com.jeff.api.domain.Cliente;
 import com.jeff.api.domain.Pedido;
 
 public abstract class AbstractEmailService implements EmailService {
@@ -30,5 +32,21 @@ public abstract class AbstractEmailService implements EmailService {
 		return sm;
 	}
 
+	@Override
+	public void sendNewPasswordEmail(Cliente cliente, String newPass) {
+		SimpleMailMessage sm = prepareNewPassword(cliente, newPass);
+		sendEmail(sm);
+	}
+
+	protected SimpleMailMessage prepareNewPassword(Cliente cliente, String newPass) {
+		SimpleMailMessage sm = new SimpleMailMessage();
+		sm.setTo(cliente.getEmail());
+		sm.setFrom(sender);
+		sm.setSubject("Solicitação de nova senha");
+		sm.setSentDate(new Date(System.currentTimeMillis()));
+		sm.setText("Nova senha: " + newPass);
+		
+		return sm;
+	}
 
 }
