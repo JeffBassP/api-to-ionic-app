@@ -3,8 +3,10 @@ package com.jeff.api.service;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
+import java.awt.image.BufferedImage;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -44,6 +46,13 @@ public class ClienteService {
 	
 	@Autowired
 	private S3Service s3service;
+	
+	@Autowired
+	ImageService imageService;
+	
+	@Value("${img.prefix.client.profile}")
+	private String prefix;
+	
 	public Optional<Cliente> findOne(Integer id) {
 
 		UserSS user = UserService.authenticated();
@@ -128,13 +137,10 @@ public class ClienteService {
 			throw new AuthorizationException("Acesso negado");
 		}
 		
-		URI uri = s3service.uploadFile(multipartFile);
+		BufferedImage jpgImage = imageService.getJpgImageFromFile(multipartFile);
 		
-		Cliente cli = repository.findById(user.getId()).get();
-		cli.setImgUrl(uri.toString());
+		String fileName = prefix + user.getId() + ".jpg";
 		
-		repository.save(cli);
-		
-		return s3service.uploadFile(multipartFile);
+		return s3service.uploadFile(imageService.getInputStream(jpgImage, "jpg"), fileName, "image");
 	}
 }
