@@ -2,7 +2,6 @@ package com.jeff.api.service;
 
 import java.util.Date;
 
-import org.apache.naming.factory.SendMailFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 
